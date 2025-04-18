@@ -1,31 +1,55 @@
-# 📦 Git Installer Script
+# 📦 Git Installer
 
-A simple Bash script to install and configure Git on Ubuntu systems.
+Automated script to install and configure Git on Linux systems.
 
 ## ✨ Features
 
-- Installs Git from official Ubuntu repositories
-- Optional configuration of user name and email
-- Displays installed Git version
-- Interactive setup process
+- Automatic OS detection and package manager selection
+- Git installation and basic configuration
+- Interactive setup for user.name and user.email
+- Supports multiple Linux distributions:
+  - Ubuntu/Debian
+  - CentOS/RHEL/Rocky/AlmaLinux
+  - Fedora
+  - Arch Linux
 
-## 🔧 System Requirements
+## 🔧 Requirements
 
-- Ubuntu-based Linux distribution
-- User with sudo privileges
+- Root/sudo privileges
 - Internet connection
+- One of the supported Linux distributions
 
 ## 🚀 Usage
 
-1. Download the script:
+### 1. Download
 ```bash
 wget https://raw.githubusercontent.com/MinhPhanCoder/AutoHub/refs/heads/master/git_install/git_install.sh
-chmod +x git-install.sh
+chmod +x git_install.sh
 ```
 
-2. Run the script:
+### 2. Install
 ```bash
-./git-install.sh
+./git_install.sh
 ```
 
-3. Follow the prompts to configure Git with your information if desired.
+### 3. Verify
+```bash
+git --version
+git config --list
+```
+
+## ❌ Uninstall
+```bash
+# For Ubuntu/Debian
+sudo apt remove git -y
+sudo apt autoremove -y
+
+# For CentOS/RHEL/Rocky/AlmaLinux/Fedora
+sudo yum remove git -y
+
+# For Arch Linux
+sudo pacman -R git
+
+# Remove global Git configuration
+rm -f ~/.gitconfig
+```

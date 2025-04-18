@@ -1,34 +1,57 @@
-# 🐳 Docker & Docker Compose Installer for Ubuntu
+# 🐳 Docker & Docker Compose Installer
 
-A simple Bash script to install the latest versions of **Docker CE** and **Docker Compose** on Ubuntu systems.
+Automated script to install Docker and Docker Compose on Linux systems.
 
----
+## ✨ Features
 
-## ✅ Features
+- Automatic OS detection and package manager selection
+- Docker CE installation and configuration
+- Latest Docker Compose installation
+- Automatic service startup
+- Supports multiple Linux distributions:
+  - Ubuntu/Debian
+  - CentOS/RHEL/Rocky/AlmaLinux
+  - Fedora
 
-- Installs Docker CE from the official Docker repository
-- Installs the latest Docker Compose from GitHub
-- Enables Docker to start on boot
-- Displays installed versions with clear formatting
+## 🔧 Requirements
 
----
-
-## 🧰 System Requirements
-
-- OS: Ubuntu 18.04, 20.04, 22.04 or newer
-- A user with `sudo` privileges
+- Root/sudo privileges
 - Internet connection
-
----
+- One of the supported Linux distributions
 
 ## 🚀 Usage
 
-### 1. Download the script
-
+### 1. Download
 ```bash
-wget https://raw.githubusercontent.com/MinhPhanCoder/AutoHub/refs/heads/master/git_install/git_install.sh
-chmod +x docker-install.sh
+wget https://raw.githubusercontent.com/MinhPhanCoder/AutoHub/refs/heads/master/docker_install/docker_install.sh
+chmod +x docker_install.sh
 ```
-### 2. Run
+
+### 2. Install
 ```bash
-./docker-install.sh
+./docker_install.sh
+```
+
+### 3. Verify
+```bash
+docker --version
+docker-compose --version
+docker run hello-world
+```
+
+## ❌ Uninstall
+```bash
+# For Ubuntu/Debian
+sudo apt remove docker-ce docker-ce-cli containerd.io -y
+sudo apt autoremove -y
+sudo rm -rf /var/lib/docker
+sudo rm -rf /var/lib/containerd
+
+# For CentOS/RHEL/Rocky/AlmaLinux/Fedora
+sudo yum remove docker-ce docker-ce-cli containerd.io -y
+sudo rm -rf /var/lib/docker
+sudo rm -rf /var/lib/containerd
+
+# Remove Docker Compose
+sudo rm /usr/local/bin/docker-compose
+```

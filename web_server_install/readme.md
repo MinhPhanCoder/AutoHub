@@ -1,49 +1,53 @@
-# 🌐 Apache Web Server Installer for Linux
+# 🌐 Apache Web Server Installer
 
-This script helps you **quickly install and configure Apache (httpd)** on most popular Linux distributions. It auto-detects your OS and uses the appropriate package manager and service commands.
+Automated script to install and configure Apache Web Server on Linux systems.
 
----
+## ✨ Features
 
-## ✅ Supported Distros
+- Automatic OS detection and package manager selection
+- Apache installation and auto-start configuration
+- Creates a test index.html page
+- Shows local and public IP for access
+- Supports multiple Linux distributions:
+  - Ubuntu/Debian
+  - CentOS/RHEL/Rocky/AlmaLinux
+  - Amazon Linux
+  - Fedora
+  - Arch Linux
 
-| Distribution     | Package Manager | Apache Package | Service Name |
-|------------------|------------------|----------------|--------------|
-| Ubuntu, Debian   | `apt`            | `apache2`      | `apache2`    |
-| CentOS, RHEL     | `yum`            | `httpd`        | `httpd`      |
-| AlmaLinux, Rocky | `yum`            | `httpd`        | `httpd`      |
-| Amazon Linux     | `yum`            | `httpd`        | `httpd`      |
-| Fedora           | `dnf`            | `httpd`        | `httpd`      |
-| Arch Linux       | `pacman`         | `apache`       | `httpd`      |
+## 🔧 Requirements
 
----
+- Root/sudo privileges
+- Internet connection
+- One of the supported Linux distributions
 
-## 📦 What It Does
+## 🚀 Usage
 
-- Detects your Linux distribution
-- Installs Apache (`apache2` or `httpd`)
-- Starts and enables the web server
-- Creates a sample `index.html` for testing
-- Displays your IP address for access
-
----
-
-## 🚀 How to Use
-
-### 1. Download and run
-
+### 1. Download
 ```bash
 wget https://raw.githubusercontent.com/MinhPhanCoder/AutoHub/refs/heads/master/web_server_install/web_server_install.sh
 chmod +x web_server_install.sh
+```
+
+### 2. Install
+```bash
 ./web_server_install.sh
 ```
 
-### 2. Stop Ubuntu/Debian:
-```
-sudo systemctl stop apache2
-sudo systemctl disable apache2
-```
-### 2. Stop CentOS/RHEL/Amazon/Fedora/Arch::
-```
-sudo systemctl stop httpd
-sudo systemctl disable httpd
+### 3. Verify
+Access the test page:
+- Local: `http://localhost`
+- Network: `http://<your-ip>`
+
+## ❌ Uninstall
+```bash
+# For Ubuntu/Debian
+sudo apt remove apache2 -y
+sudo apt autoremove -y
+
+# For CentOS/RHEL/Rocky/AlmaLinux/Fedora
+sudo yum remove httpd -y
+
+# For Arch Linux
+sudo pacman -R apache
 ```
