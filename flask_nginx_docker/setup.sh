@@ -72,33 +72,40 @@ wait_for_dns() {
 setup_environment() {
     echo -e "${GREEN}📁 Setting up environment...${NC}"
     
+    # Create required directories
+    mkdir -p ./certbot/conf
+    mkdir -p ./certbot/www
+    mkdir -p ./nginx/conf
+    mkdir -p ./nginx/www
+    
     # Configure Nginx
     cp ./nginx/conf/app.conf.template ./nginx/conf/app.conf
     sed -i "s/DOMAIN_NAME/$DOMAIN/g" ./nginx/conf/app.conf
 
-    # Start services without SSL first
+    # Start nginx first
     docker-compose up -d nginx
+    
+    # Wait for nginx to start
+    echo -e "${YELLOW}⏳ Waiting for Nginx to start...${NC}"
+    sleep 5
 }
 
 # Setup SSL certificates
 setup_ssl() {
     echo -e "${GREEN}🔒 Setting up SSL...${NC}"
 
-    # Request Let's Encrypt certificate with modern parameters
+    # Request Let's Encrypt certificate using webroot plugin
     docker-compose run --rm --entrypoint "\
-        certbot --nginx \
+        certbot certonly --webroot \
+        --webroot-path=/var/www/certbot \
         --non-interactive \
         --agree-tos \
         --email admin@${DOMAIN} \
-        --redirect \
+        --preferred-challenges=http \
         --hsts \
         --staple-ocsp \
         -d ${DOMAIN} \
         -d www.${DOMAIN}" certbot
-
-    # Setup auto renewal in docker-compose
-    docker-compose exec certbot \
-        sh -c 'echo "0 0,12 * * * certbot renew --quiet" | crontab -'
 
     # Reload nginx to apply new SSL config
     docker-compose exec nginx nginx -s reload
