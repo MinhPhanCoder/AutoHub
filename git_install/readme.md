@@ -19,7 +19,7 @@ A simple Bash script to install and configure Git on Ubuntu systems.
 
 1. Download the script:
 ```bash
-wget https://github.com/MinhPhanCoder/AutoHub/blob/master/git_install/git-install.sh
+wget https://raw.githubusercontent.com/MinhPhanCoder/AutoHub/refs/heads/master/git_install/git-install.sh
 chmod +x git-install.sh
 ```
 
