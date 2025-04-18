@@ -28,7 +28,7 @@ For development with localhost:
 For production with real domain:
 ```bash
 chmod +x setup_domain.sh
-./setup_domain.sh your-domain.com
+./setup_domain.sh sunmin.site
 docker-compose up --build -d
 ```
 
