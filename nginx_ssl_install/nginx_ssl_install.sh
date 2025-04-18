@@ -6,6 +6,7 @@ set -e
 # Colors
 GREEN='\033[0;32m'
 RED='\033[0;31m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 LINE="==================================="
 
@@ -67,6 +68,86 @@ install_certbot() {
             exit 1
             ;;
     esac
+}
+
+check_dns() {
+    local domain=$1
+    local server_ip=$(curl -s ifconfig.me)
+    echo -e "✅✅✅Your VM public IP: $server_ip✅✅✅"
+    echo -e "${YELLOW}🔍 Checking DNS records for $domain...${NC}"
+    
+    # Install dig if not present
+    case "$DISTRO" in
+        ubuntu|debian)
+            if ! command -v dig &> /dev/null; then
+                sudo apt update -y
+                sudo apt install -y dnsutils
+            fi
+            ;;
+        centos|rhel|rocky|almalinux|fedora|amzn)
+            if ! command -v dig &> /dev/null; then
+                sudo yum install -y bind-utils
+            fi
+            ;;
+    esac
+
+    # Get domain's IP
+    local domain_ip=$(dig +short "$domain" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+    local www_domain_ip=$(dig +short "www.$domain" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+
+    if [ -z "$domain_ip" ]; then
+        echo -e "${RED}❌ No A record found for $domain${NC}"
+        echo -e "${YELLOW}ℹ️  Please add these DNS records:${NC}"
+        echo -e "   $domain       A   $server_ip"
+        echo -e "   www.$domain   A   $server_ip"
+        return 1
+    fi
+
+    if [ -z "$www_domain_ip" ]; then
+        echo -e "${RED}❌ No A record found for www.$domain${NC}"
+        echo -e "${YELLOW}ℹ️  Please add these DNS records:${NC}"
+        echo -e "   $domain       A   $server_ip"
+        echo -e "   www.$domain   A   $server_ip"
+        return 1
+    fi
+
+    if [ "$domain_ip" != "$server_ip" ]; then
+        echo -e "${RED}❌ Domain $domain is pointing to $domain_ip instead of $server_ip${NC}"
+        return 1
+    fi
+
+    if [ "$www_domain_ip" != "$server_ip" ]; then
+        echo -e "${RED}❌ Domain www.$domain is pointing to $www_domain_ip instead of $server_ip${NC}"
+        return 1
+    fi
+
+    echo -e "${GREEN}✅ DNS records are correctly configured!${NC}"
+    return 0
+}
+
+wait_for_dns() {
+    local domain=$1
+    local max_attempts=5
+    local attempt=1
+
+    while [ $attempt -le $max_attempts ]; do
+        echo -e "${YELLOW}🕒 Attempt $attempt of $max_attempts to verify DNS...${NC}"
+        
+        if check_dns "$domain"; then
+            return 0
+        fi
+
+        if [ $attempt -lt $max_attempts ]; then
+            echo -e "${YELLOW}⏳ Waiting 30 seconds before next check...${NC}"
+            sleep 30
+        fi
+        
+        attempt=$((attempt + 1))
+    done
+
+    echo -e "${RED}❌ DNS verification failed after $max_attempts attempts.${NC}"
+    echo -e "${YELLOW}Please ensure your DNS records are properly configured and try again.${NC}"
+    exit 1
 }
 
 configure_nginx() {
@@ -153,6 +234,16 @@ DOMAIN=$1
 detect_os
 install_nginx
 install_certbot
+
+echo -e "${YELLOW}$LINE"
+echo "⚠️  Before proceeding, please ensure you have configured your DNS records:"
+echo "   $DOMAIN       A   $(curl -s ifconfig.me)"
+echo "   www.$DOMAIN   A   $(curl -s ifconfig.me)"
+echo -e "$LINE${NC}"
+
+read -p "Press Enter when you have configured your DNS records..."
+
+wait_for_dns $DOMAIN
 configure_nginx $DOMAIN
 setup_ssl $DOMAIN
 

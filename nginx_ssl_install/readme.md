@@ -5,6 +5,7 @@ Automated script to install and configure Nginx web server with Let's Encrypt SS
 ## ✨ Features
 
 - Automatic OS detection and package manager selection
+- DNS record verification before SSL setup
 - Nginx installation and configuration
 - Let's Encrypt SSL certificate setup via Certbot
 - Automatic SSL renewal
@@ -23,6 +24,8 @@ Automated script to install and configure Nginx web server with Let's Encrypt SS
 - Root/sudo privileges
 - Internet connection
 - Domain name with DNS A records pointing to your server
+  - A record for yourdomain.com
+  - A record for www.yourdomain.com
 - One of the supported Linux distributions
 - Port 80 and 443 open in firewall
 
@@ -34,17 +37,23 @@ wget https://raw.githubusercontent.com/MinhPhanCoder/AutoHub/refs/heads/master/n
 chmod +x nginx_ssl_install.sh
 ```
 
-### 2. Install
+### 2. Configure DNS
+Before running the script, add these DNS A records at your domain registrar:
+- yourdomain.com -> your-server-ip
+- www.yourdomain.com -> your-server-ip
+
+### 3. Install
 ```bash
 ./nginx_ssl_install.sh your-domain.com
 ```
+The script will verify your DNS records and wait if they haven't propagated yet.
 
-### 3. Verify
+### 4. Verify
 Access your domain:
 - HTTP: `http://your-domain.com` (will redirect to HTTPS)
 - HTTPS: `https://your-domain.com`
 
-### 4. File Locations
+### 5. File Locations
 - Website root: `/var/www/your-domain.com/`
 - Nginx config: `/etc/nginx/conf.d/your-domain.com.conf`
 - SSL certificates: `/etc/letsencrypt/live/your-domain.com/`
@@ -74,3 +83,17 @@ To manually renew:
 ```bash
 sudo certbot renew
 ```
+
+## ⚠️ Troubleshooting
+
+### DNS Issues
+If the script shows DNS errors:
+1. Verify your A records are correctly set at your domain registrar
+2. Wait 5-10 minutes for DNS propagation
+3. Run the script again
+
+The script will automatically:
+- Check both domain.com and www.domain.com DNS records
+- Verify they point to your server's IP
+- Retry up to 5 times with 30-second intervals
+- Show detailed error messages if something is wrong
