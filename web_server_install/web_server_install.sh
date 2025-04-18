@@ -70,15 +70,18 @@ echo "<!DOCTYPE html>
 <html>
 <head><title>Apache Test</title></head>
 <body>
-<h1 style='color:green;'>✔ Apache is working on $DISTRO!</h1>
+<h1 style='color:green;'>Apache is working on $DISTRO!</h1>
 <p>Served by $(hostname)</p>
 </body>
 </html>" | sudo tee "$HTML_PATH" > /dev/null
 
 # Show access info
 IP=$(hostname -I | awk '{print $1}')
+PUBLIC_IP=$(curl -s ifconfig.me || curl -s https://ipinfo.io/ip)
+
 echo -e "${GREEN}$LINE"
 echo "✅ Apache installation complete!"
 echo "🌍 Access: http://$IP"
+echo "🌍 Access your site publicly at: http://$PUBLIC_IP${NC}"
 echo -e "$LINE${NC}"
 echo -e "${GREEN}🎉 Apache is installed and running!${NC}"

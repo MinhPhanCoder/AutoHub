@@ -33,8 +33,8 @@ This script helps you **quickly install and configure Apache (httpd)** on most p
 
 ```bash
 wget https://raw.githubusercontent.com/MinhPhanCoder/AutoHub/refs/heads/master/web_server_install/web_server_install.sh
-chmod +x install-httpd.sh
-./install-httpd.sh
+chmod +x web_server_install.sh
+./web_server_install.sh
 ```
 
 ### 2. Stop Ubuntu/Debian:
