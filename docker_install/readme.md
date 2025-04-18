@@ -26,7 +26,7 @@ A simple Bash script to install the latest versions of **Docker CE** and **Docke
 ### 1. Download the script
 
 ```bash
-wget https://yourdomain.com/install-docker.sh
+wget https://github.com/MinhPhanCoder/AutoHub/blob/master/docker_install/install-docker.sh
 chmod +x install-docker.sh
 ```
 ### 2. Run
