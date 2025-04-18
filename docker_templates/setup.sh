@@ -40,27 +40,22 @@ case "$LANGUAGE" in
     python)
         echo -e "${YELLOW}Setting up Python project...${NC}"
         cd "$PROJECT_NAME"
-        python3 -m venv venv
         ;;
     nodejs)
         echo -e "${YELLOW}Setting up Node.js project...${NC}"
         cd "$PROJECT_NAME"
-        npm install
         ;;
     java)
         echo -e "${YELLOW}Setting up Java project...${NC}"
         cd "$PROJECT_NAME"
-        ./mvnw clean package -DskipTests
         ;;
     php)
         echo -e "${YELLOW}Setting up PHP project...${NC}"
         cd "$PROJECT_NAME"
-        composer install
         ;;
     golang)
         echo -e "${YELLOW}Setting up Go project...${NC}"
         cd "$PROJECT_NAME"
-        go mod tidy
         ;;
 esac
 
