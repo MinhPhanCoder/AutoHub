@@ -73,7 +73,6 @@ install_certbot() {
 check_dns() {
     local domain=$1
     local server_ip=$(curl -s ifconfig.me)
-    echo -e "✅✅✅Your VM public IP: $server_ip✅✅✅"
     echo -e "${YELLOW}🔍 Checking DNS records for $domain...${NC}"
     
     # Install dig if not present
