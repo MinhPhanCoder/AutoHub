@@ -1,23 +1,14 @@
-FROM alpine:latest as cert-stage
-
-RUN apk add --no-cache openssl
-
-# Create SSL directory
-RUN mkdir -p /cert
-
-# Generate self-signed certificate
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /cert/nginx.key -out /cert/nginx.crt \
-    -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"
-
 FROM nginx:latest
 
-# Copy SSL certificates from cert stage
-COPY --from=cert-stage /cert/nginx.key /etc/nginx/ssl/
-COPY --from=cert-stage /cert/nginx.crt /etc/nginx/ssl/
-
-# Create SSL directory
-RUN mkdir -p /etc/nginx/ssl && chmod 600 /etc/nginx/ssl/nginx.key
+# Install certbot
+RUN apt-get update && \
+    apt-get install -y python3-certbot-nginx certbot && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Create script to obtain and renew certificate
+COPY init-letsencrypt.sh /docker-entrypoint.d/
+RUN chmod +x /docker-entrypoint.d/init-letsencrypt.sh

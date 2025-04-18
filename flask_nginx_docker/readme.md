@@ -15,8 +15,8 @@ Simple Flask API with Nginx reverse proxy and SSL in Docker.
 
 ### 1. Download
 ```bash
-git clone https://github.com/MinhPhanCoder/AutoScript.git
-cd AutoScript/flask_nginx_docker
+git clone https://github.com/MinhPhanCoder/AutoHub.git
+cd AutoHub/flask_nginx_docker
 ```
 
 ### 2. Setup Domain (Optional)
