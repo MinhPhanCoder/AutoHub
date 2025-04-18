@@ -82,6 +82,6 @@ PUBLIC_IP=$(curl -s ifconfig.me || curl -s https://ipinfo.io/ip)
 echo -e "${GREEN}$LINE"
 echo "✅ Apache installation complete!"
 echo "🌍 Access: http://$IP"
-echo "🌍 Access your site publicly at: http://$PUBLIC_IP${NC}"
+echo "🌍 Access your site publicly at: http://$PUBLIC_IP"
 echo -e "$LINE${NC}"
 echo -e "${GREEN}🎉 Apache is installed and running!${NC}"
